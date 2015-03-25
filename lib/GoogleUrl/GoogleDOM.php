@@ -27,7 +27,7 @@ class GoogleDOM extends \DOMDocument{
     /**
      * Get natural text
      */
-    const NATURAL_DESCRIPTION="descendant::div[@class='s']span[@class='st']";
+    const NATURAL_DESCRIPTION="descendant::div[@class='s']//span[@class='st']";
 
     /**
      * Get adwords nodes
@@ -125,6 +125,8 @@ class GoogleDOM extends \DOMDocument{
         // prepare the query to find url+title into the natural nodes
         $query=self::NATURAL_LINKS_IN;
 
+		$query2=self::NATURAL_DESCRIPTION;
+
 
 
         $positions=array();// we buf results
@@ -137,6 +139,11 @@ class GoogleDOM extends \DOMDocument{
             $aTag=$aTag->item(0);
 
 
+			$descrTag=$this->getXpath()->query($query2,$node);
+
+			$descrTag=$descrTag->item(0);
+
+			var_dump($descrTag);
             /* @var $aTag \DOMElement */
 
             if(!$aTag)
@@ -146,12 +153,13 @@ class GoogleDOM extends \DOMDocument{
 
             if(($protPos=strpos($url, "://"))>0){ //if no protocole it means the result is a an relative path to google. then it means than it is not a true natural result
                 $title=$aTag->nodeValue; // get the title of the result
+				$descr = $descrTag->nodeValue;
                 $shortUrl=  substr($url,$protPos+3); // ltrim the protocol
                 $shortUrl=  substr($shortUrl,0,strpos($shortUrl, "/")); // remove all what left after the first /   "google.com/search?..." becomes "google.com"
 
                 $truePosition = $number + ($this->numberResults * $this->page);
 
-                $positions[]=new GooglePosition($this->search, $shortUrl, $this->date, $truePosition, $url, $title, $node->C14N());
+                $positions[]=new GooglePosition($this->search, $shortUrl, $this->date, $truePosition, $url, $title, $node->C14N(), $descr);
 
                 $number++;
             }

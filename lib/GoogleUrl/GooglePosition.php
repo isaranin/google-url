@@ -16,46 +16,51 @@ class GooglePosition {
      * @var string
      */
     protected $keyword;
-    
+
     /**
      * the website formated like follow : subdomain.domain.tld  (leave out the www.)
-     * @var string 
+     * @var string
      */
     protected $website;
-    
+
     /**
      * position in the SERP
      * @var int
      */
     protected $position;
-    
+
     /**
      * matching url
      * @var string
      */
     protected $url;
-    
+
     /**
      * matching title
      * @var string
      */
     protected $title;
-    
+
     /**
      * html string of the matching snipper
      * @var string
      */
     protected $snippet;
-    
+
     /**
      * UNIX timestamp date of the search
      * @var int
      */
     protected $date;
-    
-    
+
+	/**
+     * Description of the search
+     * @var int
+     */
+    protected $description;
+
     /**
-     * 
+     *
      * @param string $keyword the search query
      * @param string $website the searched website
      * @param int $date the date in seconds (UNIX timestamp)
@@ -64,7 +69,7 @@ class GooglePosition {
      * @param string $title the title found in the search
      * @param strnig $snippet the html snippet found in the search
      */
-    function __construct($keyword, $website, $date, $position, $url, $title, $snippet) {
+    function __construct($keyword, $website, $date, $position, $url, $title, $snippet, $descr) {
         $this->keyword  = $keyword;
         $this->website  = $website;
         $this->position = $position;
@@ -72,10 +77,11 @@ class GooglePosition {
         $this->title    = $title;
         $this->snippet  = $snippet;
         $this->date     = $date;
+		$this->description = $descr;
     }
 
-    
-    
+
+
     public function getKeyword() {
         return $this->keyword;
     }
@@ -131,5 +137,13 @@ class GooglePosition {
     public function setDate($date) {
         $this->date = $date;
     }
-    
+
+	public function getDescription() {
+        return $this->description;
+    }
+
+	public function setDescription($descr) {
+        $this->description = $descr;
+    }
+
 }
