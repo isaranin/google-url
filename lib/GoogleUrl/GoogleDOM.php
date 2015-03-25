@@ -41,6 +41,9 @@ class GoogleDOM extends \DOMDocument{
     // we check if there is a form named 'captcha' to detect a bad page
     const CAPTCHA_FORM_XPATH="//input[@name='captcha']";
 
+	// we check if there is a form named 'captcha' to detect a bad page
+    const PAGE_COUNT_XPATH="//table[@id='nav']/*/td";
+
     protected $naturalsResults = null; // used for cache
     protected $adwsResults = null; // used for cache
     protected $xpath;
@@ -93,6 +96,20 @@ class GoogleDOM extends \DOMDocument{
 
     }
 
+	/**
+	 * return current page number from 0
+	 */
+	public function getCurrentPage() {
+		return $this->page ;
+	}
+
+	/**
+	 * return page count for query
+	 */
+	public function getPageCount() {
+		return $this->getXpath()->query(self::PAGE_COUNT_XPATH)->length - 2 ;
+	}
+
     /**
      * gives the list of the natural results
      * @return \DOMNodeList list of naturals results
@@ -143,7 +160,6 @@ class GoogleDOM extends \DOMDocument{
 
 			$descrTag=$descrTag->item(0);
 
-			var_dump($descrTag);
             /* @var $aTag \DOMElement */
 
             if(!$aTag)
