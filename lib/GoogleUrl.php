@@ -366,7 +366,8 @@ class GoogleUrl{
         $doc=new GoogleDOM($this->param("q"),$this->getUrl(),$this->getPage(),$this->param(self::PARAM_NBRESULTS));
         libxml_use_internal_errors(TRUE);
 
-		$doc->loadHTML($r);
+		// added this hack cause loadHTML dont know which encoding use, and use another from UTF
+		$doc->loadHTML('<?xml encoding="UTF-8"?>'.$r);
         libxml_use_internal_errors(FALSE);
         libxml_clear_errors();
 
