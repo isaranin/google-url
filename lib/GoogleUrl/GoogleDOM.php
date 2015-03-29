@@ -108,7 +108,7 @@ class GoogleDOM extends \DOMDocument{
 	 * return page count for query
 	 */
 	public function getPageCount() {
-		if (count($this->naturalsResults) > 0) {
+		if (count($this->getNaturals()) > 0) {
 			return max([$this->getXpath()->query(self::PAGE_COUNT_XPATH)->length - 2, 0]) ;
 		} else {
 			return 0;
