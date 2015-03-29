@@ -41,8 +41,9 @@ class GoogleDOM extends \DOMDocument{
     // we check if there is a form named 'captcha' to detect a bad page
     const CAPTCHA_FORM_XPATH="//input[@name='captcha']";
 
-	// we check if there is a form named 'captcha' to detect a bad page
     const PAGE_COUNT_XPATH="//table[@id='nav']/*/td";
+
+    const PAGE_ISLAST_XPATH="//table[@id='nav']/*/td[last()]/a";
 
     protected $naturalsResults = null; // used for cache
     protected $adwsResults = null; // used for cache
@@ -107,7 +108,15 @@ class GoogleDOM extends \DOMDocument{
 	 * return page count for query
 	 */
 	public function getPageCount() {
-		return $this->getXpath()->query(self::PAGE_COUNT_XPATH)->length - 2 ;
+		if (count($this->naturalsResults) > 0) {
+			return max([$this->getXpath()->query(self::PAGE_COUNT_XPATH)->length - 2, 0]) ;
+		} else {
+			return 0;
+		}
+	}
+
+	public function getIsLast() {
+		return $this->getXpath()->query(self::PAGE_ISLAST_XPATH)->length === 0 ;
 	}
 
     /**
@@ -142,10 +151,6 @@ class GoogleDOM extends \DOMDocument{
         // prepare the query to find url+title into the natural nodes
         $query=self::NATURAL_LINKS_IN;
 
-		$query2=self::NATURAL_DESCRIPTION;
-
-
-
         $positions=array();// we buf results
         $number=1;
         foreach($naturals as $node){
@@ -156,7 +161,7 @@ class GoogleDOM extends \DOMDocument{
             $aTag=$aTag->item(0);
 
 
-			$descrTag=$this->getXpath()->query($query2,$node);
+			$descrTag=$this->getXpath()->query(self::NATURAL_DESCRIPTION,$node);
 
 			$descrTag=$descrTag->item(0);
 
